@@ -5,10 +5,10 @@ import jwt
 
 class Database:
     def __init__(self):
-        self.users = []
+        self._users = []
 
     def create(self, email, password, name):
-        self.users.append({
+        self._users.append({
             "email": email,
             "password": bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()),
             "name": name,
@@ -16,7 +16,7 @@ class Database:
         })
 
     def find_by_email(self, email):
-        for user in filter(lambda item: item["email"] == email, self.users):
+        for user in filter(lambda item: item["email"] == email, self._users):
             return user
         return None
 
@@ -28,11 +28,11 @@ class Database:
         return self.find_by_email(email)
 
     def remove_by_email(self, email):
-        self.users = filter(lambda item: item["email"] != email, self.users)
+        self._users = filter(lambda item: item["email"] != email, self._users)
 
     def print(self):
         print("[")
-        for user in self.users:
+        for user in self._users:
             print("  {")
             for key, value in user.items():
                 print(f"    {key}: {value}")

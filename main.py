@@ -71,4 +71,15 @@ def get_current():
 
 @app.route("/api/users/current", methods=["DELETE"])
 def remove_current():
-    pass
+    credential = request.headers.get("Authorization")
+    if credential is None:
+        return "", 400
+
+    credential = credential.replace("Bearer ", "")
+    user = db.find_by_credential(credential, secret)
+    if user is None:
+        return "", 401
+
+    db.remove_by_email(user["email"])
+    db.print()
+    return "", 200
