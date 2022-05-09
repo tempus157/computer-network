@@ -4,7 +4,7 @@
 
 ```
 pip install flask bcrypt pyjwt
-flask run
+flask run --host=localhost --port=3000
 ```
 
 ## 회원가입
