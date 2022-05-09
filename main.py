@@ -16,13 +16,6 @@ def sign_out():
     pass
 
 
-@app.route("/api/users", methods=["GET"])
-def get_users():
-    if len(db.data) == 0:
-        return "", 204
-    return jsonify(db.data), 200
-
-
 @app.route("/api/users", methods=["POST"])
 def sign_up():
     if {"email", "password", "name"} <= request.json.keys():
@@ -34,7 +27,9 @@ def sign_up():
 
     if db.find_by_email(email) is not None:
         return "", 409
+
     db.create(email, password, name)
+    db.print()
     return "", 201
 
 
