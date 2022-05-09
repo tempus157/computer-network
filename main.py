@@ -56,7 +56,17 @@ def sign_up():
 
 @app.route("/api/users/current", methods=["GET"])
 def get_current():
-    pass
+    credential = request.headers.get("Authorization")
+    if credential is None:
+        return "", 400
+
+    credential = credential.replace("Bearer ", "")
+    user = db.find_by_credential(credential, secret)
+    if user is None:
+        return "", 401
+
+    user_info = {"email": user["email"], "name": user["name"]}
+    return jsonify(user_info), 200
 
 
 @app.route("/api/users/current", methods=["DELETE"])
