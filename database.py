@@ -1,5 +1,4 @@
 import bcrypt
-import uuid
 import jwt
 
 
@@ -12,7 +11,6 @@ class Database:
             "email": email,
             "password": bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()),
             "name": name,
-            "secret": uuid.uuid4()
         })
 
     def find_by_email(self, email):
