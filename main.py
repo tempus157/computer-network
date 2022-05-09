@@ -3,7 +3,7 @@ from database import Database
 import bcrypt
 import jwt
 
-jwt_key = "N34T&h*^fF=8F!PU2zctu@q^fr_9C&WE"
+secret = "N34T&h*^fF=8F!PU2zctu@q^fr_9C&WE"
 db = Database()
 app = Flask(__name__)
 
@@ -22,13 +22,19 @@ def sign_in():
     if not bcrypt.checkpw(password.encode("utf-8"), user["password"]):
         return "", 404
 
-    credential = {"credential": jwt.encode({"email": user["email"]}, jwt_key)}
+    credential = {"credential": jwt.encode({"email": user["email"]}, secret)}
     return jsonify(credential), 201
 
 
 @app.route("/api/auth", methods=["DELETE"])
 def sign_out():
-    pass
+    credential = request.headers.get("Authorization")
+    if credential is None:
+        return "", 400
+
+    credential = credential.replace("Bearer ", "")
+    user = db.find_by_credential(credential, secret)
+    return "", 200 if user is not None else 401
 
 
 @app.route("/api/users", methods=["POST"])
