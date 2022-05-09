@@ -1,16 +1,34 @@
-# This is a sample Python script.
+from flask import Flask
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+app = Flask(__name__)
+print(__name__)
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+@app.route("/", methods=["GET"])
+def hello_world():
+    return "Hello, World!"
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+@app.route("/api/auth", methods=["POST"])
+def sign_in():
+    pass
+
+
+@app.route("/api/auth", methods=["DELETE"])
+def sign_out():
+    pass
+
+
+@app.route("/api/users", methods=["POST"])
+def sign_up():
+    pass
+
+
+@app.route("/api/users/current", methods=["GET"])
+def get_current():
+    pass
+
+
+@app.route("/api/users/current", methods=["DELETE"])
+def remove_current():
+    pass
