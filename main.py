@@ -1,14 +1,29 @@
 from flask import Flask, request, jsonify
 from database import Database
+import bcrypt
+import jwt
 
+jwt_key = "N34T&h*^fF=8F!PU2zctu@q^fr_9C&WE"
 db = Database()
 app = Flask(__name__)
-print(__name__)
 
 
 @app.route("/api/auth", methods=["POST"])
 def sign_in():
-    pass
+    if {"email", "password"} <= request.json.keys():
+        email = request.json["email"]
+        password = request.json["password"]
+    else:
+        return "", 400
+
+    user = db.find_by_email(email)
+    if user is None:
+        return "", 404
+    if not bcrypt.checkpw(password.encode("utf-8"), user["password"]):
+        return "", 404
+
+    credential = {"credential": jwt.encode({"email": user["email"]}, jwt_key)}
+    return jsonify(credential), 201
 
 
 @app.route("/api/auth", methods=["DELETE"])
